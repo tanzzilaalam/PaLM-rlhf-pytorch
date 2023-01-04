@@ -1,4 +1,4 @@
-## Trial Version (exlploring)
+# Trial Version (exlploring)
 
 ### create virtual environment:
 
@@ -17,3 +17,16 @@ or, run:
 
 ```
 source ./.venv/bin/activate
+```
+
+## Custom / random text dataset:
+
+original repo trained with: data/enwik8.gz
+
+original training code: train.py
+
+<br>
+
+custom trial: downloaded and processed from https://www.kaggle.com/datasets/yasserh/amazon-product-reviews-dataset
+
+custom training code (dummy) with cpu: amazon_train.py
