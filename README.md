@@ -46,12 +46,8 @@ custom training code (dummy) with cpu: amazon_train.py
 
 ```bash
 python amazon_prepare_txtfile.py
-
-amazon_create_tensors.py
-
-
 ```
 
 ```bash
-python amazon_train.py
+python -u amazon_train.py > results.txt
 ```

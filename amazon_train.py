@@ -49,7 +49,7 @@ device = accelerator.device
 model = PaLM(
     num_tokens=256,
     dim=512,
-    depth=2
+    depth=4
 ).to(device)
 
 
@@ -105,6 +105,7 @@ for i in tqdm.tqdm(range(NUM_BATCHES), mininterval=10.0, desc="training"):
         accelerator.backward(loss / GRADIENT_ACCUMULATE_EVERY)
 
     if i % VALIDATE_EVERY == 0:
+        accelerator.print(f"Current iteration: {i}")
         accelerator.print(f"training loss: {loss.item()}")
         
     accelerator.clip_grad_norm_(model.parameters(), 0.5)
