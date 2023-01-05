@@ -1,6 +1,6 @@
 # Trial Version (exlploring)
 
-### create virtual environment:
+## create virtual environment:
 
 ```
 mkdir .venv
@@ -27,6 +27,31 @@ original training code: train.py
 
 <br>
 
-custom trial: downloaded and processed from https://www.kaggle.com/datasets/yasserh/amazon-product-reviews-dataset
+<br>
+
+custom trial: downloaded and processed from:
+
+1. https://www.kaggle.com/datasets/yasserh/amazon-product-reviews-dataset
+
+2. https://www.kaggle.com/datasets/kritanjalijain/amazon-reviews
+
+3. https://www.kaggle.com/datasets/grikomsn/amazon-cell-phones-reviews
+
+4. https://www.kaggle.com/datasets/datafiniti/consumer-reviews-of-amazon-products
+
 
 custom training code (dummy) with cpu: amazon_train.py
+
+### now run the following:
+
+```bash
+python amazon_prepare_txtfile.py
+
+amazon_create_tensors.py
+
+
+```
+
+```bash
+python amazon_train.py
+```

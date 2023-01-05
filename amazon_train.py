@@ -15,13 +15,13 @@ import math
 
 # constants
 
-NUM_BATCHES = 100 #int(1e5)
+NUM_BATCHES = int(1e5)
 BATCH_SIZE = 4
-GRADIENT_ACCUMULATE_EVERY = 1 #4
+GRADIENT_ACCUMULATE_EVERY = 4
 LEARNING_RATE = 2e-4
-VALIDATE_EVERY = 4 #100
+VALIDATE_EVERY = 200
 PRIME_LENGTH = 128
-GENERATE_EVERY = 4  #500
+GENERATE_EVERY = 200
 GENERATE_LENGTH = 512
 SEQ_LEN = 1024
 
@@ -52,35 +52,14 @@ model = PaLM(
     depth=2
 ).to(device)
 
-# prepare csv data and write as txt:
 
-with open('try/archive/7817_1.csv','r') as infile,open('try/archive/7817_1.txt','w') as outfile:
-    reader = csv.DictReader(infile,delimiter=',')
-    # for row in reader:
-    #     if row.get('reviews.text'):
-    #         print(row.get('reviews.text'))
-    #         break
-    outfile.write('\n'.join(row.get('reviews.text') for row in reader if row.get('reviews.text')))
+# prepare merged data
 
-
-# prepare enwik8 data
-
-with open("try/archive/7817_1.txt") as file:
-    X = np.fromstring(file.read(int(95e6)), dtype=np.uint8)
-    # print(X)
-    # print(type(X))
-    # read_content = file.read()
-    # read_content = str(read_content)
-    # print(type(read_content))
-    # print(read_content)
-    # with open('try/data_try.txt', 'w') as f:
-    #     f.write(read_content)
-
-    # print(X.shape)
-    # print(int(X.shape[0]))
+with open("try/merged_data/merge.txt") as file:
+    X = np.fromstring(file.read(int(1e9)), dtype=np.uint8)
     trX, vaX = np.split(X, [math.floor(int(X.shape[0])*0.8)])
     print(trX.shape)
-    print(vaX.shape) 
+    print(vaX.shape)
     data_train, data_val = torch.from_numpy(trX), torch.from_numpy(vaX)
 
 
@@ -105,10 +84,8 @@ val_loader = cycle(DataLoader(val_dataset, batch_size=BATCH_SIZE))
 
 # print(train_dataset.__len__())
 
-# for i in range(3):
-#     print(train_dataset.__getitem__(i).shape)
-
-
+# for i in range(10):
+#     print(train_dataset.__getitem__(i))
 
 # optimizer
 
@@ -127,7 +104,9 @@ for i in tqdm.tqdm(range(NUM_BATCHES), mininterval=10.0, desc="training"):
         loss = model(next(train_loader), return_loss = True)
         accelerator.backward(loss / GRADIENT_ACCUMULATE_EVERY)
 
-    accelerator.print(f"training loss: {loss.item()}")
+    if i % VALIDATE_EVERY == 0:
+        accelerator.print(f"training loss: {loss.item()}")
+        
     accelerator.clip_grad_norm_(model.parameters(), 0.5)
 
     optim.step()
