@@ -52,7 +52,7 @@ model = PaLM(
     depth=4
 ).to(device)
 
-
+print("no. of parameters:  ", sum(p.numel() for p in model.parameters()))
 # prepare merged data
 
 with open("try/merged_data/merge.txt") as file:
